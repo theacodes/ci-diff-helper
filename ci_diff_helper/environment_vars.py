@@ -145,3 +145,45 @@ CIRCLE_CI_PR_OWNER = 'CIRCLE_PR_USERNAME'
 We only expect this environment variable to be set during a
 build that is a part of a pull request from a fork.
 """
+
+GITHUB_PULL_REQUEST_NUMBER = 'GITHUB_PULL_REQUEST_NUMBER'
+"""The ID of the PR that started the current build.
+
+We only expect this environment variable to be set during a
+Kokoro build that is a part of a pull request.
+"""
+
+GITHUB_PULL_REQUEST_URL = 'GITHUB_PULL_REQUEST_URL'
+"""A link to the GitHub pull request.
+
+We only expect this environment variable to be set during a
+Kokoro build that is a part of a pull request.
+"""
+
+GITHUB_COMMIT_URL = 'GITHUB_COMMIT_URL'
+"""A link to the GitHub commit.
+
+We only expect this environment variable to be set during a
+Kokoro build that is a part of a merge into a branch.
+"""
+
+GERRIT_BRANCH = 'GERRIT_BRANCH'
+"""Name of the branch of a Gerrit change request.
+
+We only expect this environment variable to be set during a
+Kokoro build that is a part of a Gerrit change request.
+"""
+
+GERRIT_CHANGE_NUMBER = 'GERRIT_CHANGE_NUMBER'
+"""The ID of the Gerrit change that started the current build.
+
+We only expect this environment variable to be set during a
+Kokoro build that is a part of a Gerrit change request.
+"""
+
+GOB_COMMIT = 'GOB_COMMIT'
+"""The commit hash of a merge commit for Gerrit.
+
+We only expect this environment variable to be set during a
+Kokoro build that is a part of a Gerrit merge.
+"""

@@ -210,6 +210,7 @@ from ci_diff_helper.circle_ci import CircleCI
 from ci_diff_helper.git_tools import get_changed_files
 from ci_diff_helper.git_tools import get_checked_in_files
 from ci_diff_helper.git_tools import git_root
+from ci_diff_helper.kokoro import Kokoro
 from ci_diff_helper.travis import Travis
 
 
@@ -220,6 +221,7 @@ __all__ = [
     'get_checked_in_files',
     'get_config',
     'git_root',
+    'Kokoro',
     'Travis',
 ]
 
@@ -234,7 +236,7 @@ def get_config():
     Raises:
         OSError: If no (unique) environment is active.
     """
-    choices = [AppVeyor(), CircleCI(), Travis()]
+    choices = [AppVeyor(), CircleCI(), Kokoro(), Travis()]
     current = []
     for choice in choices:
         if choice.active:
