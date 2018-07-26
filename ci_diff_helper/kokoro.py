@@ -71,8 +71,8 @@ the current PR being built:
   import os
   os.environ = {
       'KOKORO_ENV_VAR': 'some-value',
-      'GITHUB_PULL_REQUEST_NUMBER': '23',
-      'GITHUB_PULL_REQUEST_URL': (
+      'KOKORO_GITHUB_PULL_REQUEST_NUMBER': '23',
+      'KOKORO_GITHUB_PULL_REQUEST_URL': (
           'https://github.com/organization/repository/pull/23'),
   }
   import ci_diff_helper
@@ -129,7 +129,7 @@ def _ci_branch(provider):
     if provider != KokoroRepoProvider.gerrit:
         return None
     # Gerrit does not have branch set on merge commits.
-    return os.environ.get(env.GERRIT_BRANCH)
+    return os.environ.get(env.KOKORO_GERRIT_BRANCH)
 
 
 def _kokoro_ci_pr():
@@ -139,11 +139,11 @@ def _kokoro_ci_pr():
         Optional[int]: The current pull request ID.
     """
     try:
-        return int(os.getenv(env.GITHUB_PULL_REQUEST_NUMBER, ''))
+        return int(os.getenv(env.KOKORO_GITHUB_PULL_REQUEST_NUMBER, ''))
     except ValueError:
         pass
     try:
-        return int(os.getenv(env.GERRIT_CHANGE_NUMBER, ''))
+        return int(os.getenv(env.KOKORO_GERRIT_CHANGE_NUMBER, ''))
     except ValueError:
         return None
 
@@ -155,13 +155,13 @@ def _repo_url():
         Optional[str]: The repository URL for the current build.
     """
     try:
-        pr_url = os.environ[env.GITHUB_PULL_REQUEST_URL]
+        pr_url = os.environ[env.KOKORO_GITHUB_PULL_REQUEST_URL]
         return re.sub(r'/pull/[0-9]+', '', pr_url)
     except KeyError:
         pass
 
     try:
-        commit_url = os.environ[env.GITHUB_COMMIT_URL]
+        commit_url = os.environ[env.KOKORO_GITHUB_COMMIT_URL]
         return re.sub(r'/commit/.*', '', commit_url)
     except KeyError:
         return None
@@ -181,7 +181,8 @@ def _provider_slug(repo_url):
         ValueError: If we couldn't determine the provider.
     """
     env_keys = os.environ.keys()
-    if env.GERRIT_BRANCH in env_keys or env.GOB_COMMIT in env_keys:
+    if (env.KOKORO_GERRIT_BRANCH in env_keys
+            or env.KOKORO_GOB_COMMIT in env_keys):
         return KokoroRepoProvider.gerrit, None
 
     if repo_url and _GITHUB_HOST in repo_url:
@@ -216,9 +217,7 @@ class Kokoro(_config_base.Config):
     _repo_url = _utils.UNSET
     _slug = _utils.UNSET
     # Class attributes.
-    #_active_env_var = env.IN_CIRCLE_CI
-    _branch_env_var = env.GERRIT_BRANCH
-    #_tag_env_var = env.CIRCLE_CI_TAG
+    _branch_env_var = env.KOKORO_GERRIT_BRANCH
 
     @property
     def active(self):
